@@ -1,17 +1,12 @@
 {
-  "name": "fullstack-books-project",
+  "name": "fullstack-books-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "preinstall": "cd server && npm install",
-    "install": "cd client && npm install",
+    "preinstall": "echo Installing dependencies...",
+    "install": "cd client && npm install && cd ../server && npm install",
     "dev:client": "cd client && npm run dev",
-    "dev:server": "cd server && npm run dev",
+    "dev:server": "cd server && tsc-watch --onSuccess \"node dist/app.js\"",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "start": "cd server && npm run start"
+  }
 }
