@@ -1,16 +1,20 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './components/HomePage';
-import BookPage from './components/BookPage';
+import BookForm from './components/BookForm';
+import BookDetail from './components/BookDetail';
 import NotFound from './components/NotFound';
-import './App.css';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/book/:bookName" element={<BookPage />} />
+          <Route path="/" element={
+            <div>
+              <h1>books</h1>
+              <BookForm />
+            </div>
+          } />
+          <Route path="/book/:bookName" element={<BookDetail />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

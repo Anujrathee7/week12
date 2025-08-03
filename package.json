@@ -1,16 +1,15 @@
 {
-  "name": "fullstack-books-app",
+  "name": "fullstack-books-project",
   "version": "1.0.0",
-  "description": "Full-stack TypeScript application with React and Express",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "preinstall": "cd client && npm install && cd ../server && npm install",
-    "install": "echo 'Dependencies installed'",
+    "preinstall": "cd server && npm install",
+    "install": "cd client && npm install",
     "dev:client": "cd client && npm run dev",
     "dev:server": "cd server && npm run dev",
     "build": "cd client && npm run build",
-    "start": "cd server && npm start",
-    "postinstall": "cd client && npm install react-router-dom @types/react-router-dom"
+    "start": "cd server && npm start"
   },
   "keywords": [],
   "author": "",
