@@ -5,7 +5,6 @@ import path from 'path';
 
 const app = express();
 const PORT = 1234;
-
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 app.use(express.json());
@@ -25,7 +24,8 @@ const bookSchema = new mongoose.Schema({
   pages: Number
 });
 
-const Book = mongoose.model('Book', bookSchema);
+// Explicitly define 'books' as collection name
+const Book = mongoose.model('Book', bookSchema, 'books');
 
 app.post('/api/book', async (req, res) => {
   const book = new Book(req.body);
@@ -33,11 +33,15 @@ app.post('/api/book', async (req, res) => {
   res.status(201).json(book);
 });
 
-// Serve React build in production
+// Optional GET route for listing books (used by tests)
+app.get('/api/books', async (req, res) => {
+  const books = await Book.find({});
+  res.json(books);
+});
+
 if (NODE_ENV === 'production') {
   const __dirname = path.resolve();
   app.use(express.static(path.join(__dirname, '../client/dist')));
-
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist/index.html'));
   });

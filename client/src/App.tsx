@@ -15,18 +15,21 @@ function MainForm() {
   };
 
   return (
-    <form onSubmit={submit}>
-      <input id="name" type="text" value={book.name} onChange={e => setBook({ ...book, name: e.target.value })} />
-      <input id="author" type="text" value={book.author} onChange={e => setBook({ ...book, author: e.target.value })} />
-      <input id="pages" type="number" value={book.pages} onChange={e => setBook({ ...book, pages: Number(e.target.value) })} />
-      <input id="submit" type="submit" />
-    </form>
+    <>
+      <h1>books</h1>
+      <form onSubmit={submit}>
+        <input id="name" type="text" value={book.name} onChange={e => setBook({ ...book, name: e.target.value })} />
+        <input id="author" type="text" value={book.author} onChange={e => setBook({ ...book, author: e.target.value })} />
+        <input id="pages" type="number" value={book.pages} onChange={e => setBook({ ...book, pages: Number(e.target.value) })} />
+        <input id="submit" type="submit" />
+      </form>
+    </>
   );
 }
 
 function BookPage() {
   const { bookName } = useParams();
-  return <div><h1>Book: {bookName}</h1></div>;
+  return <div>Book: {bookName}</div>;
 }
 
 function NotFound() {
