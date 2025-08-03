@@ -16,39 +16,29 @@ if (NODE_ENV === 'development') {
 mongoose.connect('mongodb://localhost:27017/fullstack', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-} as any).then(async () => {
-  console.log('Mongo connected');
+} as any).then(() => console.log('Mongo connected'));
 
-  // 🔧 Ensure 'books' collection exists by inserting + deleting a dummy
-  const temp = new Book({ name: '__temp__', author: '__temp__', pages: 0 });
-  await temp.save();
-  await Book.deleteOne({ name: '__temp__' });
-});
-
-// Define schema and model
 const bookSchema = new mongoose.Schema({
   name: String,
   author: String,
   pages: Number
 });
 
-// ✅ Explicit collection name: 'books'
+// Explicitly define 'books' as collection name
 const Book = mongoose.model('Book', bookSchema, 'books');
 
-// POST route
 app.post('/api/book', async (req, res) => {
   const book = new Book(req.body);
   await book.save();
   res.status(201).json(book);
 });
 
-// Optional GET route for tests
+// Optional GET route for listing books (used by tests)
 app.get('/api/books', async (req, res) => {
   const books = await Book.find({});
   res.json(books);
 });
 
-// Production setup
 if (NODE_ENV === 'production') {
   const __dirname = path.resolve();
   app.use(express.static(path.join(__dirname, '../client/dist')));
