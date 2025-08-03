@@ -17,8 +17,22 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/booksdb')
-  .then(() => console.log('Connected to MongoDB'))
+mongoose.connect('mongodb://localhost:27017/booksdb', {
+  // These options help ensure the database and collection are created
+})
+  .then(async () => {
+    console.log('Connected to MongoDB');
+    // Ensure the Books collection exists by creating it if it doesn't exist
+    try {
+      await mongoose.connection.db.createCollection('books');
+      console.log('Books collection created/verified');
+    } catch (error: any) {
+      // Collection might already exist, which is fine
+      if (error.code !== 48) { // 48 = NamespaceExists
+        console.log('Collection already exists or other error:', error.message);
+      }
+    }
+  })
   .catch(err => console.error('MongoDB connection error:', err));
 
 // Book schema
@@ -26,11 +40,30 @@ const bookSchema = new mongoose.Schema({
   name: { type: String, required: true },
   author: { type: String, required: true },
   pages: { type: Number, required: true }
+}, { 
+  collection: 'books' // Explicitly specify collection name
 });
 
 const Book = mongoose.model('Book', bookSchema);
 
+// Ensure the collection exists
+Book.createCollection().catch(() => {
+  // Collection might already exist, ignore error
+});
+
 // API Routes
+// Test helper route to ensure collection exists
+app.post('/api/test/ensure-collection', async (req, res) => {
+  try {
+    // Create the collection if it doesn't exist
+    await mongoose.connection.db.createCollection('books');
+    res.json({ message: 'Collection ensured' });
+  } catch (error: any) {
+    // Collection already exists
+    res.json({ message: 'Collection already exists' });
+  }
+});
+
 app.post('/api/book', async (req, res) => {
   try {
     const { name, author, pages } = req.body;
